@@ -22,6 +22,8 @@ export default (url, outputPath = '.') => {
         return Promise.reject(`ERROR: Unable to connect to given URL: ${error.config.url}\n`);
       } else if (error.code === 'ECONNREFUSED') {
         return Promise.reject(`ERROR: Connection to ${error.address} refused by server\n`);
+      } else if (error.code === 'ENOENT') {
+        return Promise.reject(`ERROR: No such file or directory: ${error.path}\n`);
       }
 
       console.log(error);
