@@ -1,0 +1,58 @@
+{
+  "name": "nalanpa-third-project",
+  "version": "0.1.0",
+  "description": "Page Loader -- Third learning project on Hexlet",
+  "main": "dist/index.js",
+  "bin": {
+    "gendiff": "dist/bin/page-loader.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "babel-node": "babel-node",
+    "flow": "flow",
+    "flow-typed": "flow-typed",
+    "gulp": "gulp",
+    "eslint": "eslint",
+    "build": "NODE_ENV=production babel src --out-dir dist --source-maps inline",
+    "prepublish": "npm run build"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/__tests__/__fixtures__/"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nalanpa/project-lvl3-s91.git"
+  },
+  "author": "Alan Nosenkis <nalanpa@yandex.ru>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nalanpa/project-lvl3-s91/issues"
+  },
+  "homepage": "https://github.com/Nalanpa/project-lvl3-s91#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "gulp": "*",
+    "ini": "^1.3.4",
+    "js-yaml": "^3.8.3",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "babel-cli": "*",
+    "babel-core": "*",
+    "babel-eslint": "*",
+    "babel-plugin-transform-runtime": "*",
+    "babel-preset-env": "*",
+    "babel-preset-flow": "*",
+    "babel-preset-stage-0": "*",
+    "debug": "*",
+    "eslint": "*",
+    "eslint-config-airbnb-base": "*",
+    "eslint-plugin-flowtype": "*",
+    "eslint-plugin-import": "*",
+    "flow-bin": "^0.37",
+    "flow-typed": "*",
+    "jest": "^18"
+  }
+}
