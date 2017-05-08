@@ -10,3 +10,17 @@
 ```
 make install nalanpa-third-project
 ```
+
+##Usage:
+```
+page-loader [options] <pageUri>
+example: page-loader --option /tmp https://hexlet.io/courses
+```
+
+Save target pages. Default location is current directory 
+
+  Options:
+
+    -h, --help           output usage information
+    -V, --version        output the version number
+    -o, --output [path]  Output path
