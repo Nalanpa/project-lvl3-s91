@@ -4,7 +4,7 @@
   "description": "Page Loader -- Third learning project on Hexlet",
   "main": "dist/index.js",
   "bin": {
-    "gendiff": "dist/bin/page-loader.js"
+    "page-loader": "dist/bin/page-loader.js"
   },
   "scripts": {
     "test": "jest",
