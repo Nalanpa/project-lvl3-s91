@@ -25,9 +25,9 @@ describe('test page loader', () => {
 
   it('No errors', (done) => {
     const url = `${host}`;
-    const expectedMessage = 'Ok';
     const fileName = generateName(url);
     const filePath = path.resolve(tempDir, fileName);
+    const expectedMessage = `OK: Data was downloaded from ${url} to ${filePath}\n`;
 
     return pageLoad(url, tempDir)
       .then((message) => {
@@ -42,7 +42,7 @@ describe('test page loader', () => {
 
   it('Error 404', async () => {
     const url = `${host}/absent_page`;
-    const expectedMessage = `ERROR: File isn't found by url ${url}`;
+    const expectedMessage = `ERROR: File isn't found by url ${url}\n`;
     try {
       await pageLoad(url, tempDir);
     } catch (error) {

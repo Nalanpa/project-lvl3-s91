@@ -12,13 +12,19 @@ export default (url, outputPath = '.') => {
     .get(url)
     .then(result => result.data)
     .then(data => fs.writeFile(filePath, data))
-    .then(() => 'Ok')
+    .then(() => `OK: Data was downloaded from ${url} to ${filePath}\n`)
     .catch((error) => {
       if (error.response) {
         if (error.response.status === 404) {
-          return Promise.reject(`ERROR: File isn't found by url ${error.config.url}`);
+          return Promise.reject(`ERROR: File isn't found by url ${error.config.url}\n`);
         }
+      } else if (error.code === 'ENOTFOUND') {
+        return Promise.reject(`ERROR: Unable to connect to given URL: ${error.config.url}\n`);
+      } else if (error.code === 'ECONNREFUSED') {
+        return Promise.reject(`ERROR: Connection to ${error.address} refused by server\n`);
       }
-      return Promise.reject(`ERROR: ${error.code}`);
+
+      console.log(error);
+      return Promise.reject(`ERROR: ${error.code}\n`);
     });
 };
