@@ -1,25 +1,31 @@
 import fs from 'mz/fs';
 import path from 'path';
 import axios from './lib/axios';
-import generateName from './lib/name_generator';
+import generateName from './lib/url_formater';
 import parseLinks from './lib/links_parser';
-import formatLink from './lib/links_formatter';
+import resourcesLoad from './lib/resources_loader';
 
 
 export default (url, outputPath = '.') => {
-  const fileName = generateName(url, 'page');
+  const fileName = generateName('page', url);
+  const dir = generateName(url, 'dir');
   const filePath = path.resolve(outputPath, fileName);
 
   return axios
     .get(url)
     .then(result => result.data)
+    .then(data => fs.writeFile(filePath, data))
     // .then((data) => {
     //   const links = parseLinks(data);
-    //   const fullLinks = links.map(link => formatLink(link, url));
-    //   const page = links.reduce((acc, link) =>
-    //     acc.replace(link, `${filesDir}${path.sep}${getNameFromUrl(link)}`), data);
+    //   const localPageData = links.reduce((acc, link) =>
+    //     acc.replace(link, generateName('localLink', dir, link)), data);
+    //   fs.writeFile(filePath, localPageData);
+    //   return links;
     // })
-    .then(data => fs.writeFile(filePath, data))
+    // .then((links) => {
+    //   const fullLinks = links.map(link => generateName('fullLink', url, link));
+    //   resourcesLoad(fullLinks, dir);
+    // })
     .then(() => `OK: Data was downloaded from ${url} to ${filePath}\n`)
     .catch((error) => {
       if (error.response) {
