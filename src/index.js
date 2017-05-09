@@ -5,7 +5,7 @@ import generateName from './lib/file_name_generator';
 
 
 export default (url, outputPath = '.') => {
-  const fileName = generateName(url);
+  const fileName = generateName(url, 'file');
   const filePath = path.resolve(outputPath, fileName);
 
   return axios

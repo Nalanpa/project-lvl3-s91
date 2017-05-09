@@ -25,7 +25,7 @@ describe('test page loader', () => {
 
   it('No errors', (done) => {
     const url = `${host}`;
-    const fileName = generateName(url);
+    const fileName = generateName(url, 'file');
     const filePath = path.resolve(tempDir, fileName);
     const expectedMessage = `OK: Data was downloaded from ${url} to ${filePath}\n`;
 
