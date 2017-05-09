@@ -7,8 +7,11 @@ start:
 publish:
 	npm publish
 
+test:
+	npm test
+
 lint:
-	npm run eslint -- src
+	npm run eslint -- src test
 
 lintall:
 	npm run eslint
@@ -16,8 +19,5 @@ lintall:
 build:
 	rm -rf dist
 	npm run build
-
-test:
-	npm test
 
 .PHONY: install start publish lint lintall build test

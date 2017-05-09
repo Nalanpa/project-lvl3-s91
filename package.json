@@ -1,6 +1,6 @@
 {
   "name": "nalanpa-third-project",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Page Loader -- Third learning project on Hexlet",
   "main": "dist/index.js",
   "bin": {
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/Nalanpa/project-lvl3-s91#readme",
   "dependencies": {
     "axios": "^0.16.1",
+    "cheerio": "^0.22.0",
     "commander": "^2.9.0",
     "gulp": "*",
     "ini": "^1.3.4",

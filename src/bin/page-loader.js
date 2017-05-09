@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import program from 'commander';
-import pageLoader from '../index';
+import pageLoader from '../';
 import pjson from '../../package.json';
 
 program

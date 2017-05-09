@@ -1,16 +1,24 @@
 import fs from 'mz/fs';
 import path from 'path';
 import axios from './lib/axios';
-import generateName from './lib/file_name_generator';
+import generateName from './lib/name_generator';
+import parseLinks from './lib/links_parser';
+import formatLink from './lib/links_formatter';
 
 
 export default (url, outputPath = '.') => {
-  const fileName = generateName(url, 'file');
+  const fileName = generateName(url, 'page');
   const filePath = path.resolve(outputPath, fileName);
 
   return axios
     .get(url)
     .then(result => result.data)
+    // .then((data) => {
+    //   const links = parseLinks(data);
+    //   const fullLinks = links.map(link => formatLink(link, url));
+    //   const page = links.reduce((acc, link) =>
+    //     acc.replace(link, `${filesDir}${path.sep}${getNameFromUrl(link)}`), data);
+    // })
     .then(data => fs.writeFile(filePath, data))
     .then(() => `OK: Data was downloaded from ${url} to ${filePath}\n`)
     .catch((error) => {

@@ -2,9 +2,8 @@ import fs from 'mz/fs';
 import os from 'os';
 import nock from 'nock';
 import path from 'path';
-// import axios from '../src/lib/axios';
 import pageLoad from '../src';
-import generateName from '../src/lib/file_name_generator';
+import generateName from '../src/lib/name_generator';
 
 
 const host = 'http://www.example.com';
@@ -25,7 +24,7 @@ describe('test page loader', () => {
 
   it('No errors', (done) => {
     const url = `${host}`;
-    const fileName = generateName(url, 'file');
+    const fileName = generateName(url, 'page');
     const filePath = path.resolve(tempDir, fileName);
     const expectedMessage = `OK: Data was downloaded from ${url} to ${filePath}\n`;
 
