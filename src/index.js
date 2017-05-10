@@ -3,30 +3,42 @@ import path from 'path';
 import axios from './lib/axios';
 import generateName from './lib/url_formater';
 import parseLinks from './lib/links_parser';
-import resourcesLoad from './lib/resources_loader';
 
 
-export default (url, outputPath = '.') => {
-  const fileName = generateName('page', url);
-  const dir = generateName(url, 'dir');
-  const filePath = path.resolve(outputPath, fileName);
+const loadResource = (url, dir) =>
+    axios.get(url, { responseType: 'arraybuffer' })
+    .then(result => fs.writeFile(path.resolve(dir, generateName('resourceFile', url)), result.data))
+    .catch(error => Promise.reject(error));
+
+
+const loadResources = (urls, dir) =>
+    fs.exists(dir)
+    .then((exists) => {
+      if (!exists) fs.mkdir(dir);
+    })
+    .then(Promise.all(urls.map(url => loadResource(url, dir))))
+    .then(() => 'Ok')
+    .catch(error => Promise.reject(error));
+
+
+export default (pageURL, outputPath = '.') => {
+  const pageName = path.resolve(outputPath, generateName('page', pageURL));
+  const recourcesDir = path.resolve(outputPath, generateName('resourcesDir', pageURL));
 
   return axios
-    .get(url)
+    .get(pageURL)
     .then(result => result.data)
-    .then(data => fs.writeFile(filePath, data))
-    // .then((data) => {
-    //   const links = parseLinks(data);
-    //   const localPageData = links.reduce((acc, link) =>
-    //     acc.replace(link, generateName('localLink', dir, link)), data);
-    //   fs.writeFile(filePath, localPageData);
-    //   return links;
-    // })
-    // .then((links) => {
-    //   const fullLinks = links.map(link => generateName('fullLink', url, link));
-    //   resourcesLoad(fullLinks, dir);
-    // })
-    .then(() => `OK: Data was downloaded from ${url} to ${filePath}\n`)
+    .then((data) => {
+      const links = parseLinks(data);
+      const fullLinks = links.map(link => generateName('fullLink', pageURL, link));
+      const localPageData = links.reduce((acc, link) =>
+        acc.replace(link, generateName('localLink', recourcesDir, link)), data);
+      return Promise.all([
+        loadResources(fullLinks, recourcesDir),
+        fs.writeFile(pageName, localPageData)]);
+    })
+    .then(() => `OK: Data was downloaded from ${pageURL} to ${pageName}\n`)
+
     .catch((error) => {
       if (error.response) {
         if (error.response.status === 404) {

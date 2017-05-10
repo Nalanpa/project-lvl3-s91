@@ -1,20 +1,12 @@
-import fs from 'mz/fs';
-import os from 'os';
-// import nock from 'nock';
 import path from 'path';
 import pageLoad from '../src';
 import generateName from '../src/lib/url_formater';
 
 
-const host = 'https://ru.hexlet.io/courses';
-const testData = 'Some output';
-// const absentPageError = 'Page is absent';
+const host = 'https://hexlet.io/courses';
 
-describe('test page loader', () => {
-  let tempDir;
-  beforeEach(() => {
-    tempDir = fs.mkdtempSync(`${os.tmpdir()}/`);
-  });
+describe('Test Hexlet page', () => {
+  const tempDir = '/Users/nalanpa/Work/tmp';
 
   it('No errors', (done) => {
     const url = `${host}`;
@@ -25,9 +17,6 @@ describe('test page loader', () => {
     return pageLoad(url, tempDir)
       .then((message) => {
         expect(message).toBe(expectedMessage);
-      })
-      .then(() => {
-        expect(fs.readFileSync(filePath, 'utf8')).toBe(testData);
       })
       .then(done)
       .catch(done.fail);

@@ -22,8 +22,8 @@ describe('test page loader', () => {
       .reply(404, absentPageError);
   });
 
+
   it('No errors', (done) => {
-    tempDir = '/Users/nalanpa/Work/project-lvl3-s91/__tests__/__fixtures__/';
     const url = `${host}`;
     const fileName = generateName('page', url);
     const filePath = path.resolve(tempDir, fileName);

@@ -26,8 +26,15 @@ const localLink = (dir, link) => {
   return `${dir}/${formatPath(fullPath)}${pathObj.ext}`;
 };
 
+const resourceFile = (link) => {
+  const urlPath = url.parse(link).path;
+  const pathObj = path.parse(urlPath);
+  const fullPath = `${pathObj.dir}/${pathObj.name}`;
+  return `${formatPath(fullPath)}${pathObj.ext}`;
+};
 
-const types = { page, resourcesDir, fullLink, localLink, nameWOExtention };
+
+const types = { page, resourcesDir, resourceFile, fullLink, localLink, nameWOExtention };
 
 export default (type, address, link) => (types[type] ? types[type](address, link) :
   'Unknown type of URL formatter');
