@@ -20,12 +20,6 @@ const fullLink = (pageURL, link) => {
   return hostname === null ? url.format({ protocol, host, pathname: link }) : link;
 };
 
-const localLink = (dir, link) => {
-  const pathObj = path.parse(link);
-  const fullPath = `${pathObj.dir}/${pathObj.name}`;
-  return `${dir}/${formatPath(fullPath)}${pathObj.ext}`;
-};
-
 const resourceFile = (link) => {
   const urlPath = url.parse(link).path;
   const pathObj = path.parse(urlPath);
@@ -33,6 +27,7 @@ const resourceFile = (link) => {
   return `${formatPath(fullPath)}${pathObj.ext}`;
 };
 
+const localLink = (dir, link) => `${dir}/${resourceFile(link)}`;
 
 const types = { page, resourcesDir, resourceFile, fullLink, localLink, nameWOExtention };
 
