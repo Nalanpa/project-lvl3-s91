@@ -33,9 +33,7 @@ export default (pageURL, outputPath = '.') => {
   logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
 
   if (!fss.existsSync(outputPath)) {
-    const message = `ERROR: Path not found: ${outputPath}\n`;
-    console.error(message);
-    return Promise.reject(message);
+    return Promise.reject(`ERROR: Path not found: ${outputPath}\n`);
   }
 
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
@@ -56,32 +54,20 @@ export default (pageURL, outputPath = '.') => {
     .then(() => `OK: Data was downloaded from ${pageURL} to ${pageName}\n`)
 
     .catch((error) => {
-      // console.error(error);
       if (error.response) {
         if (error.response.status === 404) {
-          const message = `ERROR: 404: File isn't found by url ${error.config.url}\n`;
-          console.error(message);
-          return Promise.reject(message);
+          return Promise.reject(`ERROR: 404: File isn't found by url ${error.config.url}\n`);
         } else if (error.response.status === 500) {
-          const message = `ERROR: 500: Server is unavailable by url ${error.config.url}\n`;
-          console.error(message);
-          return Promise.reject(message);
+          return Promise.reject(`ERROR: 500: Server is unavailable by url ${error.config.url}\n`);
         }
       } else if (error.code === 'ENOTFOUND') {
-        const message = `ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`;
-        console.error(message);
-        return Promise.reject(message);
+        return Promise.reject(`ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`);
       } else if (error.code === 'ECONNREFUSED') {
-        const message = `ERROR: ${error.code}: Connection to ${error.address} refused by server\n`;
-        console.error(message);
-        return Promise.reject(message);
+        return Promise.reject(`ERROR: ${error.code}: Connection to ${error.address} refused by server\n`);
       } else if (error.code === 'ENOENT') {
-        const message = `ERROR: ${error.code}: No such file or directory: ${error.path}\n`;
-        console.error(message);
-        return Promise.reject(message);
+        return Promise.reject(`ERROR: ${error.code}: No such file or directory: ${error.path}\n`);
       }
 
-      console.error(error);
       return Promise.reject(`ERROR: ${error.code}\n`);
     });
 };
