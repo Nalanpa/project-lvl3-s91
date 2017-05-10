@@ -11,7 +11,10 @@ program
   .action((url) => {
     pageLoader(url, program.output)
       .then(res => console.log(res))
-      .catch(error => console.log(error));
+      .catch((error) => {
+        console.error(error);
+        process.exit(1);
+      });
   })
   .parse(process.argv);
 

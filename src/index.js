@@ -1,4 +1,5 @@
 import fs from 'mz/fs';
+import fss from 'fs';
 import debug from 'debug';
 import path from 'path';
 import axios from './lib/axios';
@@ -29,10 +30,16 @@ const loadResources = (urls, dir) =>
 
 
 export default (pageURL, outputPath = '.') => {
+  logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
+
+  if (!fss.existsSync(outputPath)) {
+    const message = `ERROR: Path not found: ${outputPath}\n`;
+    console.error(message);
+    return Promise.reject(message);
+  }
+
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
   const recourcesDir = path.resolve(outputPath, generateName('resourcesDir', pageURL));
-
-  logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
 
   return axios
     .get(pageURL)
@@ -49,19 +56,32 @@ export default (pageURL, outputPath = '.') => {
     .then(() => `OK: Data was downloaded from ${pageURL} to ${pageName}\n`)
 
     .catch((error) => {
+      // console.error(error);
       if (error.response) {
         if (error.response.status === 404) {
-          return Promise.reject(`ERROR: File isn't found by url ${error.config.url}\n`);
+          const message = `ERROR: 404: File isn't found by url ${error.config.url}\n`;
+          console.error(message);
+          return Promise.reject(message);
+        } else if (error.response.status === 500) {
+          const message = `ERROR: 500: Server is unavailable by url ${error.config.url}\n`;
+          console.error(message);
+          return Promise.reject(message);
         }
       } else if (error.code === 'ENOTFOUND') {
-        return Promise.reject(`ERROR: Unable to connect to given URL: ${error.config.url}\n`);
+        const message = `ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`;
+        console.error(message);
+        return Promise.reject(message);
       } else if (error.code === 'ECONNREFUSED') {
-        return Promise.reject(`ERROR: Connection to ${error.address} refused by server\n`);
+        const message = `ERROR: ${error.code}: Connection to ${error.address} refused by server\n`;
+        console.error(message);
+        return Promise.reject(message);
       } else if (error.code === 'ENOENT') {
-        return Promise.reject(`ERROR: No such file or directory: ${error.path}\n`);
+        const message = `ERROR: ${error.code}: No such file or directory: ${error.path}\n`;
+        console.error(message);
+        return Promise.reject(message);
       }
 
-      console.log(error);
+      console.error(error);
       return Promise.reject(`ERROR: ${error.code}\n`);
     });
 };

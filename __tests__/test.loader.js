@@ -8,7 +8,6 @@ import generateName from '../src/lib/url_formater';
 
 const host = 'http://www.example.com';
 const testData = 'Some output...!';
-const absentPageError = 'Page is absent';
 
 describe('test page loader', () => {
   let tempDir;
@@ -17,9 +16,6 @@ describe('test page loader', () => {
     nock(host)
       .get('/')
       .reply(200, testData);
-    nock(host)
-      .get('/absent_page')
-      .reply(404, absentPageError);
   });
 
 
@@ -38,15 +34,5 @@ describe('test page loader', () => {
       })
       .then(done)
       .catch(done.fail);
-  });
-
-  it('Error 404', async () => {
-    const url = `${host}/absent_page`;
-    const expectedMessage = `ERROR: File isn't found by url ${url}\n`;
-    try {
-      await pageLoad(url, tempDir);
-    } catch (error) {
-      expect(error).toBe(expectedMessage);
-    }
   });
 });
