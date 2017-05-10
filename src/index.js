@@ -1,8 +1,13 @@
 import fs from 'mz/fs';
+import debug from 'debug';
 import path from 'path';
 import axios from './lib/axios';
 import generateName from './lib/url_formater';
 import parseLinks from './lib/links_parser';
+
+
+const logApp = debug('page-loader:app');
+const log = debug('page-loader:load');
 
 
 const loadResource = (url, dir) =>
@@ -13,10 +18,12 @@ const loadResource = (url, dir) =>
 
 const loadResources = (urls, dir) =>
     fs.exists(dir)
+    .then(() => log(`Load started \nDir: ${dir}`))
     .then((exists) => {
       if (!exists) fs.mkdir(dir);
     })
     .then(Promise.all(urls.map(url => loadResource(url, dir))))
+    .then(() => log('Load finished'))
     .then(() => 'Ok')
     .catch(error => Promise.reject(error));
 
@@ -24,6 +31,8 @@ const loadResources = (urls, dir) =>
 export default (pageURL, outputPath = '.') => {
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
   const recourcesDir = path.resolve(outputPath, generateName('resourcesDir', pageURL));
+
+  logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
 
   return axios
     .get(pageURL)

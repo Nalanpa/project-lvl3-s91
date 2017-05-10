@@ -1,5 +1,8 @@
 import url from 'url';
 import path from 'path';
+import debug from 'debug';
+
+const log = debug('page-loader:resource');
 
 const formatPath = address => address.split(/[^A-Z, a-z, 0-9]/g).filter(e => e).join('-');
 
@@ -24,6 +27,7 @@ const resourceFile = (link) => {
   const urlPath = url.parse(link).path;
   const pathObj = path.parse(urlPath);
   const fullPath = `${pathObj.dir}/${pathObj.name}`;
+  // log(`${formatPath(fullPath)}${pathObj.ext}`);
   return `${formatPath(fullPath)}${pathObj.ext}`;
 };
 
