@@ -1,12 +1,12 @@
 {
   "name": "nalanpa-third-project",
-  "version": "0.3.0",
+  "version": "0.3.2",
   "description": "Page Loader -- Third learning project on Hexlet",
   "main": "dist/index.js",
   "bin": {
     "page-loader": "dist/bin/page-loader.js"
   },
-  "scripts": {    
+  "scripts": {
     "test": "DEBUG=\"page-loader:*\" jest",
     "test-watch": "DEBUG=\"page-loader:*\" jest --watch",
     "babel-node": "babel-node",

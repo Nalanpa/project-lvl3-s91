@@ -18,10 +18,10 @@ const loadResource = (url, dir) =>
 
 const loadResources = (urls, dir) =>
     fs.exists(dir)
-    .then(() => log(`Load started \nDir: ${dir}`))
     .then((exists) => {
       if (!exists) fs.mkdir(dir);
     })
+    .then(() => log(`Load started \nDir: ${dir}`))
     .then(Promise.all(urls.map(url => loadResource(url, dir))))
     .then(() => log('Load finished'))
     .then(() => 'Ok')
