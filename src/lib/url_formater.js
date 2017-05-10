@@ -1,8 +1,8 @@
 import url from 'url';
 import path from 'path';
-import debug from 'debug';
+// import debug from 'debug';
 
-const log = debug('page-loader:resource');
+// const log = debug('page-loader:resource');
 
 const formatPath = address => address.split(/[^A-Z, a-z, 0-9]/g).filter(e => e).join('-');
 
