@@ -1,5 +1,4 @@
 import fs from 'mz/fs';
-import fss from 'fs';
 import debug from 'debug';
 import path from 'path';
 import axios from './lib/axios';
@@ -13,36 +12,42 @@ const log = debug('page-loader:load');
 
 const loadResource = (url, dir) =>
     axios.get(url, { responseType: 'arraybuffer' })
-    .then(result => fs.writeFile(path.resolve(dir, generateName('resourceFile', url)), result.data))
-    .catch(error => Promise.reject(error));
+    .then(result => fs.writeFile(path.resolve(dir, generateName('resourceFile', url)), result.data));
 
 
 const loadResources = (urls, dir) =>
     fs.exists(dir)
     .then((exists) => {
-      if (!exists) fs.mkdir(dir);
+      if (!exists) {
+        return fs.mkdir(dir);
+      }
+      return Promise.resolve();
     })
-    .then(() => log(`Load started \nDir: ${dir}`))
+    .then(() => log(`Load resources started \nDir: ${dir}`))
     .then(Promise.all(urls.map(url => loadResource(url, dir))))
-    .then(() => log('Load finished'))
-    .then(() => 'Ok')
-    .catch(error => Promise.reject(error));
+    .then(() => log('Load resources finished'))
+    .then(() => 'Ok');
 
 
 export default (pageURL, outputPath = '.', ctx = {}) => {
   logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
 
-  if (!fss.existsSync(outputPath)) {
-    return Promise.reject(`ERROR: Path not found: ${outputPath}\n`);
-  }
-
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
   const recourcesDir = path.resolve(outputPath, generateName('resourcesDir', pageURL));
 
-  return axios
-    .get(pageURL)
+  ctx.page = pageName;
+
+  return fs.exists(outputPath)
+    .then((exists) => {
+      if (!exists) {
+        return Promise.reject(new Error(`ERROR: Path not found: ${outputPath}\n`));
+      }
+      return Promise.resolve();
+    })
+    .then(() => axios.get(pageURL))
     .then(result => result.data)
     .then((data) => {
+      log('in Data');
       const links = parseLinks(data);
       ctx.links = links;
       const fullLinks = links.map(link => generateName('fullLink', pageURL, link));
@@ -52,9 +57,13 @@ export default (pageURL, outputPath = '.', ctx = {}) => {
         loadResources(fullLinks, recourcesDir),
         fs.writeFile(pageName, localPageData)]);
     })
-    .then(() => `OK: Data was downloaded from ${pageURL} to ${pageName}\n`)
+    .then(() => {
+      ctx.res = `OK: Data was downloaded from ${pageURL} to ${pageName}\n`;
+      return ctx.res;
+    })
 
     .catch((error) => {
+      log('In CATCH', error);
       if (error.response) {
         switch (error.response.status) {
           case 404:
@@ -76,6 +85,6 @@ export default (pageURL, outputPath = '.', ctx = {}) => {
             break;
         }
       }
-      return Promise.reject(new Error(`ERROR: ${error.code}\n`));
+      return Promise.reject(new Error(error));
     });
 };

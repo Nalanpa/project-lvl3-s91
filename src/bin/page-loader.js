@@ -38,18 +38,7 @@ program
           ]),
       },
     ]);
-    // const tasks = new Listr([
-    //   {
-    //     title: 'Test',
-    //     task: () => 'Foo',
-    //   },
-    //   {
-    //     title: `Loading page ${url}`.yellow,
-    //     task: ctx => pageLoader(url, program.output, ctx)
-    //       .then(res => (ctx.res = res))
-    //       .then(console.log(ctx.res)),
-    //   },
-    // ]);
+
 
     return tasks.run()
       .catch((err) => {

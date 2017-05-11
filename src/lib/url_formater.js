@@ -31,7 +31,7 @@ const resourceFile = (link) => {
   return `${formatPath(fullPath)}${pathObj.ext}`;
 };
 
-const localLink = (dir, link) => `${dir}/${resourceFile(link)}`;
+const localLink = (dir, link) => path.join(dir, resourceFile(link));
 
 const types = { page, resourcesDir, resourceFile, fullLink, localLink, nameWOExtention };
 

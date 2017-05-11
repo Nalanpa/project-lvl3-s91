@@ -53,7 +53,7 @@ describe('Test errors', () => {
     try {
       await pageLoad(url, dir);
     } catch (error) {
-      expect(error.includes(expectedMessage)).toBe(true);
+      expect(error.message.includes(expectedMessage)).toBe(true);
     }
   });
 
