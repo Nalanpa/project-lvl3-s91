@@ -4,6 +4,9 @@ install:
 start:
 	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp https://hexlet.io/courses
 
+start-yandex:
+	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp http://yandex.ru
+
 start-error:
 	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp https://hexlet.io/coursesd
 

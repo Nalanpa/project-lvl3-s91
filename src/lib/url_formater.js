@@ -19,8 +19,16 @@ const resourcesDir = urlPath => `${nameWOExtention(urlPath)}_files`;
 
 const fullLink = (pageURL, link) => {
   const { protocol, host } = url.parse(pageURL);
-  const { hostname } = url.parse(link);
-  return hostname === null ? url.format({ protocol, host, pathname: link }) : link;
+  const { protocol: linkProtocol, host: linkHost, path: linkPath } = url.parse(link, false, true);
+
+  const resProtocol = linkProtocol || protocol;
+  const resHost = linkHost || host;
+
+  // console.log(link, resHost, resProtocol);
+  // console.log(url.format({ protocol: resProtocol, host: resHost, pathname: linkPath }));
+
+  return url.format({ protocol: resProtocol, host: resHost, pathname: linkPath });
+  // return hostname === null ? url.format({ protocol, host, pathname: path }) : link;
 };
 
 const resourceFile = (link) => {

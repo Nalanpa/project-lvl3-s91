@@ -24,24 +24,33 @@ describe('Test errors', () => {
       .reply(404, '<script src="/path/wrong-asset.js"></script>');
   });
 
-
-  it('Error 404', async () => {
-    const url = `${host}/absent_page`;
-    const expectedMessage = `ERROR: 404: File isn't found by url ${url}\n`;
+  it('Yandex', async () => {
+    const url = 'http://yandex.ru';
+    const expectedMessage = "File isn't found by url";
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error.message).toBe(expectedMessage);
+      expect(error.messageincludes(expectedMessage)).toBe(true);
+    }
+  });
+
+  it('Error 404', async () => {
+    const url = `${host}/absent_page`;
+    const expectedMessage = "File isn't found by url";
+    try {
+      await pageLoad(url, tempDir);
+    } catch (error) {
+      expect(error.message.includes(expectedMessage)).toBe(true);
     }
   });
 
   it('Error 500', async () => {
     const url = `${host}/server-not-available`;
-    const expectedMessage = `ERROR: 500: Server is unavailable by url ${url}\n`;
+    const expectedMessage = 'Server is unavailable by url';
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error.message).toBe(expectedMessage);
+      expect(error.message.includes(expectedMessage)).toBe(true);
     }
   });
 
@@ -49,7 +58,7 @@ describe('Test errors', () => {
     const url = `${host}/`;
     const dir = 'wrong_directory';
     // const expectedMessage = 'ERROR: ENOENT: No such file or directory';
-    const expectedMessage = 'ERROR: Path not found:';
+    const expectedMessage = 'Path not found:';
     try {
       await pageLoad(url, dir);
     } catch (error) {

@@ -18,6 +18,12 @@ const expectedLocalLink2 = 'ru-hexlet-io-courses_files/favicon.ico';
 
 const link2 = 'https://en.hexlet.io/lessons.rss';
 
+const link3 = '//yastatic.net/iconostasis/_/KnU823iWwj_vrPra7x9aQ-4yjRw.png';
+const expectedResourceFile3 = 'iconostasis-KnU823iWwj-vrPra7x9aQ-4yjRw.png';
+const expectedLocalLink3 = 'ru-hexlet-io-courses_files/yastatic-net-iconostasis-KnU823iWwj-vrPra7x9aQ-4yjRw.png';
+const expectedFullLink3 = 'https://yastatic.net/iconostasis/_/KnU823iWwj_vrPra7x9aQ-4yjRw.png';
+
+
 test('Test names', () => {
   expect(urlFormat('nameWOExtention', url)).toBe('ru-hexlet-io-courses');
   expect(urlFormat('page', url)).toBe(expectedFile);
@@ -30,4 +36,8 @@ test('Test names', () => {
   expect(urlFormat('localLink', expectedFolder, link1)).toBe(expectedLocalLink1);
   expect(urlFormat('localLink', expectedFolder, fullLink2)).toBe(expectedLocalLink2);
   expect(urlFormat('wrong', url)).toBe('Unknown type of URL formatter');
+
+  expect(urlFormat('fullLink', url, link3)).toBe(expectedFullLink3);
+  expect(urlFormat('localLink', expectedFolder, link3)).toBe(expectedLocalLink3);
+  expect(urlFormat('resourceFile', expectedFullLink3)).toBe(expectedResourceFile3);
 });
