@@ -55,17 +55,25 @@ export default (pageURL, outputPath = '.') => {
 
     .catch((error) => {
       if (error.response) {
-        if (error.response.status === 404) {
-          return Promise.reject(`ERROR: 404: File isn't found by url ${error.config.url}\n`);
-        } else if (error.response.status === 500) {
-          return Promise.reject(`ERROR: 500: Server is unavailable by url ${error.config.url}\n`);
+        switch (error.response.status) {
+          case 404:
+            return Promise.reject(`ERROR: 404: File isn't found by url ${error.config.url}\n`);
+          case 500:
+            return Promise.reject(`ERROR: 500: Server is unavailable by url ${error.config.url}\n`);
+          default:
+            break;
         }
-      } else if (error.code === 'ENOTFOUND') {
-        return Promise.reject(`ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`);
-      } else if (error.code === 'ECONNREFUSED') {
-        return Promise.reject(`ERROR: ${error.code}: Connection to ${error.address} refused by server\n`);
-      } else if (error.code === 'ENOENT') {
-        return Promise.reject(`ERROR: ${error.code}: No such file or directory: ${error.path}\n`);
+      } else {
+        switch (error.code) {
+          case 'ENOTFOUND':
+            return Promise.reject(`ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`);
+          case 'ECONNREFUSED':
+            return Promise.reject(`ERROR: ${error.code}: Connection to ${error.address} refused by server\n`);
+          case 'ENOENT':
+            return Promise.reject(`ERROR: ${error.code}: No such file or directory: ${error.path}\n`);
+          default:
+            break;
+        }
       }
 
       return Promise.reject(`ERROR: ${error.code}\n`);
