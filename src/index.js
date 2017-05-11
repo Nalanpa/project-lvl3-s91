@@ -29,7 +29,7 @@ const loadResources = (urls, dir) =>
     .catch(error => Promise.reject(error));
 
 
-export default (pageURL, outputPath = '.') => {
+export default (pageURL, outputPath = '.', ctx = {}) => {
   logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
 
   if (!fss.existsSync(outputPath)) {
@@ -44,6 +44,7 @@ export default (pageURL, outputPath = '.') => {
     .then(result => result.data)
     .then((data) => {
       const links = parseLinks(data);
+      ctx.links = links;
       const fullLinks = links.map(link => generateName('fullLink', pageURL, link));
       const localPageData = links.reduce((acc, link) =>
         acc.replace(link, generateName('localLink', recourcesDir, link)), data);
@@ -57,25 +58,24 @@ export default (pageURL, outputPath = '.') => {
       if (error.response) {
         switch (error.response.status) {
           case 404:
-            return Promise.reject(`ERROR: 404: File isn't found by url ${error.config.url}\n`);
+            return Promise.reject(new Error(`ERROR: 404: File isn't found by url ${error.config.url}\n`));
           case 500:
-            return Promise.reject(`ERROR: 500: Server is unavailable by url ${error.config.url}\n`);
+            return Promise.reject(new Error(`ERROR: 500: Server is unavailable by url ${error.config.url}\n`));
           default:
             break;
         }
       } else {
         switch (error.code) {
           case 'ENOTFOUND':
-            return Promise.reject(`ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`);
+            return Promise.reject(new Error(`ERROR: ${error.code}: Unable to connect to given URL: ${error.config.url}\n`));
           case 'ECONNREFUSED':
-            return Promise.reject(`ERROR: ${error.code}: Connection to ${error.address} refused by server\n`);
+            return Promise.reject(new Error(`ERROR: ${error.code}: Connection to ${error.address} refused by server\n`));
           case 'ENOENT':
-            return Promise.reject(`ERROR: ${error.code}: No such file or directory: ${error.path}\n`);
+            return Promise.reject(new Error(`ERROR: ${error.code}: No such file or directory: ${error.path}\n`));
           default:
             break;
         }
       }
-
-      return Promise.reject(`ERROR: ${error.code}\n`);
+      return Promise.reject(new Error(`ERROR: ${error.code}\n`));
     });
 };

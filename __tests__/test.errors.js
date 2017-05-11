@@ -31,7 +31,7 @@ describe('Test errors', () => {
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error).toBe(expectedMessage);
+      expect(error.message).toBe(expectedMessage);
     }
   });
 
@@ -41,7 +41,7 @@ describe('Test errors', () => {
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error).toBe(expectedMessage);
+      expect(error.message).toBe(expectedMessage);
     }
   });
 
@@ -63,7 +63,7 @@ describe('Test errors', () => {
     try {
       await pageLoad(url);
     } catch (error) {
-      expect(error.includes(expectedMessage)).toBe(true);
+      expect(error.message.includes(expectedMessage)).toBe(true);
     }
   });
 });
