@@ -3,6 +3,7 @@ import os from 'os';
 import pageLoad from '../src';
 
 const host = 'https://hexlet.io/courses';
+// const host = 'http://yandex.ru';
 
 describe('Test Hexlet page', () => {
   const tempDir = fs.mkdtempSync(`${os.tmpdir()}/`);

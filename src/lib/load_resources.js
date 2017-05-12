@@ -1,12 +1,11 @@
 import fs from 'mz/fs';
-// import debug from 'debug';
 import path from 'path';
+import debug from 'debug';
 import axios from './axios';
 import generateName from './url_formater';
 import colors from 'colors'; // eslint-disable-line
 
-// const log = debug('page-loader:load_resources');
-// const logr = debug('page-loader:load_resource');
+const log = debug('page-loader:load_resources');
 
 const loadResource = (url, dir) =>
     axios.get(url, { responseType: 'arraybuffer' })
@@ -15,26 +14,23 @@ const loadResource = (url, dir) =>
       if (error.response) {
         switch (error.response.status) {
           case 404:
-            console.error(`${'ERROR:'.yellow} 404: File isn't found by url ${error.config.url.cyan}\n`);
-            break;
+            return Promise.resolve(`${'Error:'.yellow} 404: File isn't found by url ${error.config.url.yellow}`);
           case 400:
-            console.error(`${'ERROR:'.yellow} 400: Bad request: ${error.response.config.url.cyan}\n`);
-            break;
+            return Promise.resolve(`${'Error:'.yellow} 400: Bad request: ${error.response.config.url.yellow}`);
           default:
-            console.error(`ERROR.response.status: ${error.response.status}\n`);
-            break;
+            log(error);
+            return Promise.resolve(`Error.status: ${error.response.status}`);
         }
       } else if (error.code) {
         switch (error.code) {
           case 'ENAMETOOLONG':
-            console.error(`${'ERROR:'.yellow} ENAMETOOLONG : Name of resource file is too long \n`);
-            break;
+            return Promise.resolve(`${'Error:'.yellow} ENAMETOOLONG : Name of resource file is too long `);
           default:
-            console.error(`ERROR.code: ${error.code}\n`);
-            break;
+            log(error);
+            return Promise.resolve(`Error.code: ${error.code}`);
         }
       } else {
-        console.error('UNKNOWN ERROR!!!');
+        return Promise.resolve('UNKNOWN ERROR!!!');
       }
     });
 

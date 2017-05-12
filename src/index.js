@@ -44,17 +44,22 @@ export default (pageURL, outputPath = '.') => {
         const fullLinks = links.map(link => generateName('fullLink', pageURL, link));
         const localPageData = links.reduce((acc, link) =>
           acc.replace(link, generateName('localLink', recourcesDir, link)), data);
-        return Promise.all([
-          loadResources(fullLinks, recourcesDir),
-          fs.writeFile(pageName, localPageData)]);
+        return fs.writeFile(pageName, localPageData)
+          .then(() => loadResources(fullLinks, recourcesDir))
+          .then((results) => {
+            ctx.msgs = results.filter(Boolean);
+          });
       },
     },
   ]);
 
   return tasks.run()
-    .then(() => {
-      console.log(`${'SUCCESS:'.green.bold} Data was downloaded from ${pageURL.cyan} to ${pageName.cyan}\n`);
-      return 0;
+    .then((ctx) => {
+      ctx.msgs.forEach((msg) => {
+        console.log(msg);
+      });
+      console.log(`${'\nSUCCESS:'.green.bold} Data was downloaded from ${pageURL.cyan} to ${pageName.cyan}\n`);
+      return Promise.resolve(0);
     })
     .catch((error) => {
       outputError(error);
