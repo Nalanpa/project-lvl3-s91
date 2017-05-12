@@ -15,10 +15,10 @@ const loadResource = (url, dir) =>
       if (error.response) {
         switch (error.response.status) {
           case 404:
-            console.log(`${'ERROR:'.yellow} 404: File isn't found by url ${error.config.url.cyan}\n`);
+            console.error(`${'ERROR:'.yellow} 404: File isn't found by url ${error.config.url.cyan}\n`);
             break;
           case 400:
-            console.log(`${'ERROR:'.yellow} 400: Bad request: ${error.response.config.url.cyan}\n`);
+            console.error(`${'ERROR:'.yellow} 400: Bad request: ${error.response.config.url.cyan}\n`);
             break;
           default:
             console.error(`ERROR.response.status: ${error.response.status}\n`);
@@ -27,7 +27,7 @@ const loadResource = (url, dir) =>
       } else if (error.code) {
         switch (error.code) {
           case 'ENAMETOOLONG':
-            console.log(`${'ERROR:'.yellow} ENAMETOOLONG : Name of resource file is too long \n`);
+            console.error(`${'ERROR:'.yellow} ENAMETOOLONG : Name of resource file is too long \n`);
             break;
           default:
             console.error(`ERROR.code: ${error.code}\n`);

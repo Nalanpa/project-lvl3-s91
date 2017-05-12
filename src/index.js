@@ -12,7 +12,6 @@ import loadResources from './lib/load_resources';
 
 
 export default (pageURL, outputPath = '.', ctx = {}) => {
-  // logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
   ctx.res = 'begin';
 
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
@@ -66,6 +65,6 @@ export default (pageURL, outputPath = '.', ctx = {}) => {
             break;
         }
       }
-      return Promise.reject(new Error(error));
+      return Promise.reject(new Error(error.message));
     });
 };
