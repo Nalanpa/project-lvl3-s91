@@ -1,14 +1,23 @@
 import fs from 'mz/fs';
-// import debug from 'debug';
+import debug from 'debug';
 import path from 'path';
 import axios from './axios';
 import generateName from './url_formater';
 import colors from 'colors'; // eslint-disable-line
 
-const loadResource = (url, dir) =>
-    axios.get(url, { responseType: 'arraybuffer' })
+const log = debug('page-loader:load_resources');
+const logr = debug('page-loader:load_resource');
+
+const loadResource = (url, dir) => {
+  return axios.get(url, { responseType: 'arraybuffer' })
+    .then((response) => {
+      // logr(`Url: ${url} loaded by axios`); // // //
+      return response;
+    })
     .then(result => fs.writeFile(path.resolve(dir, generateName('resourceFile', url)), result.data))
+    // .then(() => logr(`Url: ${url} writed to file`)) // // //
     .catch((error) => {
+      logr(`${'Error catched'.red}. URL: ${url}`); // // //
       if (error.response) {
         switch (error.response.status) {
           case 404:
@@ -33,16 +42,21 @@ const loadResource = (url, dir) =>
       } else {
         console.error('UNKNOWN ERROR!!!');
       }
+      // logr('End of catch'.red); // // //
+      // return Promise.reject('!!! 111 !!!'.red);
     });
+};
 
 
 export default (urls, dir) =>
     fs.exists(dir)
     .then((exists) => {
+      log('Begin load resources\n'); // // //
       if (!exists) {
         return fs.mkdir(dir);
       }
       return Promise.resolve();
     })
-    .then(Promise.all(urls.map(url => loadResource(url, dir))))
-    .then(() => 'Ok');
+    .then(() => Promise.all(urls.map(url => loadResource(url, dir))))
+    .then(() => log('All resources downloaded\n')) // // //
+    .catch(error => log(error)); // // //

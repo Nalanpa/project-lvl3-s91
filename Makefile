@@ -2,10 +2,13 @@ install:
 	npm install
 
 start:
-	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp https://hexlet.io/courses
+	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp https://hexlet.io/coursess
 
 start-yandex:
 	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp http://yandex.ru
+
+debug-yandex:
+	DEBUG="page-loader:*" npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp http://yandex.ru
 
 start-error:
 	npm run babel-node -- 'src/bin/page-loader.js' --output ./tmp https://hexlet.io/coursesd

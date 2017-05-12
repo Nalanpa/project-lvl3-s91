@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 import Listr from 'listr';
 import program from 'commander';
+import debug from 'debug';
 import colors from 'colors'; // eslint-disable-line
 import pageLoader from '../';
 import pjson from '../../package.json';
 
+const log = debug('page-loader:bin');
 
 program
   .version(pjson.version)
@@ -18,16 +20,18 @@ program
         task: ctx =>
           pageLoader(url, output, ctx)
             .catch((err) => {
-              Promise.reject(new Error(err.message));
+              log(`Error cathed in task: ${err.message} `);
+              return Promise.reject(new Error(err.message));
             }),
       },
-
     ]);
 
+    log('action');
 
     return tasks.run()
       .then(ctx => console.log(ctx.res))
       .catch((err) => {
+        log(`Error cathed in run: ${err.message} `);
         console.error(err.message.red);
         process.exit(1);
       });

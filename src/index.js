@@ -7,12 +7,12 @@ import generateName from './lib/url_formater';
 import parseLinks from './lib/links_parser';
 import loadResources from './lib/load_resources';
 
-const logApp = debug('page-loader:app');
-const log = debug('page-loader:load');
+// const logApp = debug('page-loader:app');
+const log = debug('page-loader:index');
 
 
 export default (pageURL, outputPath = '.', ctx = {}) => {
-  logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
+  // logApp(`Start app. \n  pageURL = ${pageURL} \n  outputPath = ${outputPath}`);
   ctx.res = 'begin';
 
   const pageName = path.resolve(outputPath, generateName('page', pageURL));
@@ -30,7 +30,7 @@ export default (pageURL, outputPath = '.', ctx = {}) => {
     .then(() => axios.get(pageURL))
     .then(result => result.data)
     .then((data) => {
-      log('in Data');
+      log('in Data\n');
       const links = parseLinks(data);
       ctx.links = links;
       const fullLinks = links.map(link => generateName('fullLink', pageURL, link));
@@ -41,12 +41,13 @@ export default (pageURL, outputPath = '.', ctx = {}) => {
         fs.writeFile(pageName, localPageData)]);
     })
     .then(() => {
+      log('Main finish\n'.magenta);
       ctx.res = `${'SUCCESS:'.green.bold} Data was downloaded from ${pageURL.cyan} to ${pageName.cyan}\n`;
       return ctx.res;
     })
 
     .catch((error) => {
-      log('In CATCH', error);
+      log('In CATCH'.red);
       if (error.response) {
         switch (error.response.status) {
           case 404:

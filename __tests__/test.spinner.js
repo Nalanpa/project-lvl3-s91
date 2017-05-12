@@ -1,8 +1,11 @@
 import fs from 'mz/fs';
+import debug from 'debug';
 import os from 'os';
 import Listr from 'listr';
 import colors from 'colors'; // eslint-disable-line
 import pageLoader from '../src';
+
+const log = debug('page-loader:test-spinner');
 
 test('Test spinner', () => {
   const url = 'https://hexlet.io/coursesd';
@@ -15,7 +18,7 @@ test('Test spinner', () => {
       title: 'Page loading'.cyan,
       task: ctx =>
         pageLoader(url, output, ctx)
-          // .then(console.log('0...'))
+          .then(() => log('0...'.green))
           // .then(() => new Listr([
           //   {
           //     title: 'First'.cyan,
@@ -33,7 +36,8 @@ test('Test spinner', () => {
           // ]))
           // .then(console.log('1000...'))
           .catch((err) => {
-            Promise.reject(new Error(err.message));
+            log('In task catch'.red);
+            return Promise.reject(new Error(err.message));
           }),
     },
 
@@ -43,7 +47,8 @@ test('Test spinner', () => {
   return tasks.run()
     .then(ctx => console.log(ctx.res))
     .catch((err) => {
+      log('In taskS cathc'.red, err.message);
       console.error(err.message.red);
-      process.exit(1);
+      // process.exit(1);
     });
 });
