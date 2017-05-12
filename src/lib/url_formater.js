@@ -20,22 +20,16 @@ const resourcesDir = urlPath => `${nameWOExtention(urlPath)}_files`;
 const fullLink = (pageURL, link) => {
   const { protocol, host } = url.parse(pageURL);
   const { protocol: linkProtocol, host: linkHost, path: linkPath } = url.parse(link, false, true);
-
   const resProtocol = linkProtocol || protocol;
   const resHost = linkHost || host;
 
-  // console.log(link, resHost, resProtocol);
-  // console.log(url.format({ protocol: resProtocol, host: resHost, pathname: linkPath }));
-
   return url.format({ protocol: resProtocol, host: resHost, pathname: linkPath });
-  // return hostname === null ? url.format({ protocol, host, pathname: path }) : link;
 };
 
 const resourceFile = (link) => {
   const urlPath = url.parse(link).path;
   const pathObj = path.parse(urlPath);
   const fullPath = `${pathObj.dir}/${pathObj.name}`;
-  // log(`${formatPath(fullPath)}${pathObj.ext}`);
   return `${formatPath(fullPath)}${pathObj.ext}`;
 };
 
