@@ -23,11 +23,11 @@ describe('test page loader', () => {
     const url = `${host}`;
     const fileName = generateName('page', url);
     const filePath = path.resolve(tempDir, fileName);
-    const expectedMessage = 'Data was downloaded from';
+    // const expectedMessage = 'Data was downloaded from';
 
     return pageLoad(url, tempDir)
-      .then((message) => {
-        expect(message.includes(expectedMessage)).toBe(true);
+      .then((res) => {
+        expect(res).toBe(0);
       })
       .then(() => {
         expect(fs.readFileSync(filePath, 'utf8')).toBe(testData);

@@ -26,21 +26,21 @@ describe('Test errors', () => {
 
   it('Yandex', async () => {
     const url = 'http://yandex.ru';
-    const expectedMessage = "File isn't found by url";
+    // const expectedMessage = "File isn't found by url";
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error.messageincludes(expectedMessage)).toBe(true);
+      expect(error).toBe(1);
     }
   });
 
   it('Error 404', async () => {
     const url = `${host}/absent_page`;
-    const expectedMessage = "File isn't found by url";
+    // const expectedMessage = "File isn't found by url";
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error.message.includes(expectedMessage)).toBe(true);
+      expect(error).toBe(1);
     }
   });
 
@@ -50,7 +50,7 @@ describe('Test errors', () => {
     try {
       await pageLoad(url, tempDir);
     } catch (error) {
-      expect(error.message.includes(expectedMessage)).toBe(true);
+      expect(error).toBe(1);
     }
   });
 
@@ -58,21 +58,21 @@ describe('Test errors', () => {
     const url = `${host}/`;
     const dir = 'wrong_directory';
     // const expectedMessage = 'ERROR: ENOENT: No such file or directory';
-    const expectedMessage = 'Path not found:';
+    // const expectedMessage = 'Path not found:';
     try {
       await pageLoad(url, dir);
     } catch (error) {
-      expect(error.message.includes(expectedMessage)).toBe(true);
+      expect(error).toBe(1);
     }
   });
 
   it('Connection refused by server', async () => {
     const url = 'wrong_url';
-    const expectedMessage = 'refused by server';
+    // const expectedMessage = 'refused by server';
     try {
       await pageLoad(url);
     } catch (error) {
-      expect(error.message.includes(expectedMessage)).toBe(true);
+      expect(error).toBe(1);
     }
   });
 });

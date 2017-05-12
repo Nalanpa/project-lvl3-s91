@@ -16,7 +16,7 @@ test('Test spinner', () => {
     {
       title: 'Page loading'.cyan,
       task: ctx =>
-        pageLoader(url, output, ctx)
+        pageLoader(url, output)
           .catch(err => Promise.reject(new Error(err.message))),
     },
 
